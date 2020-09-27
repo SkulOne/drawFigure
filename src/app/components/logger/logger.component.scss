@@ -1,0 +1,22 @@
+:host{
+  display: block;
+  width: 100%;
+  height: 60px;
+  box-shadow: -2px 7px 5px -5px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  background: white;
+  border-radius:0 0 4px 4px ;
+  overflow: auto;
+  .content{
+    font-family: monospace;
+    color: #3e3d3d;
+    padding: 7px;
+    .message-list{
+      display: flex;
+      flex-direction: column;
+      padding-left: 4px;
+      line-height: 13px;
+      margin: 0;
+    }
+  }
+;
+}
