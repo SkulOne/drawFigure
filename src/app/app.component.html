@@ -1,2 +1,5 @@
 <app-figure-input (figureEnter)="setFigures($event)"></app-figure-input>
-<app-svg-canvas [figures]="figures"></app-svg-canvas>
+<div>
+  <app-svg-canvas [figures]="figures"></app-svg-canvas>
+  <app-logger></app-logger>
+</div>

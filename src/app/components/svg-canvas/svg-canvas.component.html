@@ -1,2 +1,8 @@
-<svg width="600" height="550" #svg>
-</svg>
+<svg #svg height="1200px"
+     [style.background]="color"
+></svg>
+<button mat-button mat-icon-button color="primary" aria-label="Canvas settings" [colorPicker]="color" (colorPickerChange)="color=$event">
+  <mat-icon>
+    settings
+  </mat-icon>
+</button>

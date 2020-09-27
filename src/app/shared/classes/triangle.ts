@@ -12,6 +12,7 @@ export class Triangle extends Figure{
     element.setAttributeNS(null, 'stroke-width', String(this.lineWight));
     element.setAttributeNS(null, 'stroke-dasharray', String(this.lineType));
     element.setAttributeNS(null, 'fill', String(this.backgroundColor));
+    element.setAttributeNS(null, 'stroke', this.lineColor);
     return element;
   }
 }

@@ -9,7 +9,9 @@ import {Figure} from '../../shared/classes/abstract/figure';
 export class SvgCanvasComponent implements OnInit, OnChanges {
   @Input() figures: Figure[];
   @ViewChild('svg') svg;
-
+  width = 600;
+  color: any;
+  figureSvg: SVGElement[] = [];
   constructor() {
   }
 
@@ -20,6 +22,7 @@ export class SvgCanvasComponent implements OnInit, OnChanges {
     if (this.figures) {
       this.figures.forEach((figure) => {
         this.svg.nativeElement.appendChild(figure.draw());
+        console.log(this.figureSvg);
       });
     }
   }

@@ -13,6 +13,7 @@ export class Rectangle extends Figure{
     element.setAttributeNS(null, 'height', String(Math.abs(this.coord[0][1] - this.coord[1][1])));
     element.setAttributeNS(null, 'stroke-width', String(this.lineWight));
     element.setAttributeNS(null, 'stroke-dasharray', String(this.lineType));
+    element.setAttributeNS(null, 'stroke', this.lineColor);
     element.setAttributeNS(null, 'fill', String(this.backgroundColor));
     return element;
   }
