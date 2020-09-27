@@ -1,15 +1,10 @@
 import {Figure} from './abstract/figure';
-import {Coord} from '../interfaces/coord';
 
 export class Circle extends Figure{
-  private _radius: number;
-  constructor(coord: Coord[], radius: number) {
-    if (coord.length === 1 && radius > 0) {
-      super(coord);
-      this.radius = radius;
-    } else {
-      throw new Error('Invalid coord or radius value');
-    }
+  private _radius?: number;
+  constructor(radius: number = 0) {
+    super();
+    this.radius = radius;
   }
 
   get radius(): number {
@@ -18,5 +13,17 @@ export class Circle extends Figure{
 
   set radius(value: number) {
     this._radius = value;
+  }
+
+  draw(): SVGElement {
+    const element = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    element.setAttributeNS(null, 'cx', String(this.coord[0][0]));
+    element.setAttributeNS(null, 'cy', String(this.coord[0][1]));
+    element.setAttributeNS(null, 'r', String(this.radius));
+    element.setAttributeNS(null, 'stroke', this.lineColor);
+    element.setAttributeNS(null, 'stroke-width', String(this.lineWight));
+    element.setAttributeNS(null, 'stroke-dasharray', String(this.lineType));
+    element.setAttributeNS(null, 'fill', String(this.backgroundColor));
+    return element;
   }
 }

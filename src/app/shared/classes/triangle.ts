@@ -1,12 +1,17 @@
-import {Coord} from '../interfaces/coord';
 import {Figure} from './abstract/figure';
 
 export class Triangle extends Figure{
-  constructor(coord: Coord[]) {
-    if (coord.length === 3) {
-      super(coord);
-    } else {
-      throw new Error('Invalid coord size');
-    }
+  constructor() {
+    super();
+  }
+
+  draw(): SVGElement {
+    const element = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    const coords = this.coord.map(value => value.toString()).join(' ');
+    element.setAttributeNS(null, 'points', coords);
+    element.setAttributeNS(null, 'stroke-width', String(this.lineWight));
+    element.setAttributeNS(null, 'stroke-dasharray', String(this.lineType));
+    element.setAttributeNS(null, 'fill', String(this.backgroundColor));
+    return element;
   }
 }

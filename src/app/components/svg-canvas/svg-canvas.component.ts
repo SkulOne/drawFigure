@@ -20,7 +20,6 @@ export class SvgCanvasComponent implements OnInit, OnChanges {
     if (this.figures) {
       this.figures.forEach((figure) => {
         this.svg.nativeElement.appendChild(figure.draw());
-        console.log(figure.draw());
       });
     }
   }

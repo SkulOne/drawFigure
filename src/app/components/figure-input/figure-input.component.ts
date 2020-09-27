@@ -1,7 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {CommandService} from '../../shared/services/command.service';
 import {Figure} from '../../shared/classes/abstract/figure';
-import {NgForm} from '@angular/forms';
 
 
 @Component({

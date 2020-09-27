@@ -1,15 +1,14 @@
-import {Coord} from '../../interfaces/coord';
 import {LineType} from '../../enums/line-type.enum';
 
 export abstract class Figure {
-  private _coord: Coord[];
+  private _coord?: number[][];
   private _lineColor?: string;
   private _backgroundColor?: string;
   private _lineWight?: number;
   private _lineType?: LineType;
 
 
-  protected constructor(coord: Coord[],
+  protected constructor(coord: number[][] = [[0, 0], [0, 0]],
                         lineColor: string = 'black',
                         backgroundColor: string = 'white',
                         lineWight: number = 1,
@@ -21,11 +20,11 @@ export abstract class Figure {
     this._lineType = lineType;
   }
 
-  get coord(): Coord[] {
+  get coord(): number[][] {
     return this._coord;
   }
 
-  set coord(value: Coord[]) {
+  set coord(value: number[][]) {
     this._coord = value;
   }
 
