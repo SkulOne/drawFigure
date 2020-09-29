@@ -15,11 +15,9 @@
     border-radius: 4px;
   }
 
-  ::ng-deep {
-    button {
-      position: absolute;
-      top: 0;
-      right: 0;
-    }
+  .actions {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 }

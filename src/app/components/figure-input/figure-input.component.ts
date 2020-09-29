@@ -2,9 +2,17 @@ import {Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges, ViewC
 import {CommandService} from '../../shared/services/command.service';
 import {Figure} from '../../shared/classes/abstract/figure';
 import {LoggerService} from '../../shared/services/logger.service';
-import {AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors} from '@angular/forms';
+import {
+  AbstractControl,
+  AsyncValidatorFn,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import {Observable, of} from 'rxjs';
-
+import {ValidateFn} from 'codelyzer/walkerFactory/walkerFn';
 
 @Component({
   selector: 'app-figure-input',
@@ -12,53 +20,31 @@ import {Observable, of} from 'rxjs';
   styleUrls: ['./figure-input.component.scss']
 })
 export class FigureInputComponent implements OnInit {
-  @Output() figureEnter = new EventEmitter<Figure[]>();
-  figureCommand: string;
-  errorMessage: string;
-  reactiveForm: FormControl;
+  @Output() figureEnter = new EventEmitter<string>();
   form: FormGroup;
 
-  constructor(private commandService: CommandService, private logger: LoggerService) {
-    this.logger.errorMessage.subscribe((message) => {
-      this.errorMessage = message;
-    });
+  constructor() {
     this.form = new FormGroup({
-      username: new FormControl('')
+      query: new FormControl('line -p [50, 50] [100, 100] -c rgb(255, 0, 0)', [Validators.required, emailDomainValidator])
     });
-    this.reactiveForm = new FormControl('', [], [emailDomainValidator]);
-    console.log(this.form);
-    console.log(this.reactiveForm);
   }
 
   ngOnInit(): void {
   }
 
   onSubmit(): void {
-    try {
-      this.figureEnter.emit(this.commandService.getFigures(this.reactiveForm.value));
-    } catch (e) {
-      this.logger.errorMessage.next(e.message);
+    if (this.form.valid) {
+      console.log('onSubmit');
+      this.figureEnter.emit(this.form.getRawValue().query);
     }
-    this.logger.log(this.figureCommand);
   }
-
-  test(va): void {
-    console.log(va);
-  }
-
 }
 
-function emailDomainValidator(control: FormControl): Observable<ValidationErrors> {
+function emailDomainValidator(control: FormControl): ValidationErrors {
   const email = control.value;
-  if (email && email.indexOf('@') !== -1) {
-    const [_, domain] = email.split('@');
-    if (domain !== 'codecraft.tv') {
-      return of({
-        emailDomain: {
-          parsedDomain: domain
-        }
-      });
-    }
+  if (email && email.indexOf('@') !== -1) {return {
+    queryPattern: true
+  };
   }
-  return of(null);
+  return null;
 }

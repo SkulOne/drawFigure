@@ -1,8 +1,51 @@
-<svg #svg height="1200px"
-     [style.background]="color"
-></svg>
-<button mat-button mat-icon-button color="primary" aria-label="Canvas settings" [colorPicker]="color" (colorPickerChange)="color=$event">
-  <mat-icon>
-    settings
-  </mat-icon>
-</button>
+<svg
+  #svg
+  height="1200px"
+  [style.background]="color"
+>
+  <ng-container *ngFor="let shape of figures$ | async" [ngSwitch]="getShapeType(shape)">
+    <line
+      *ngSwitchCase="'Line'"
+      [attr.x1]="shape.coord[0][0]"
+      [attr.y1]="shape.coord[0][1]"
+      [attr.x2]="shape.coord[1][0]"
+      [attr.y2]="shape.coord[1][1]"
+      [attr.stroke]="shape.lineColor"
+      [attr.stroke-width]="shape.lineWight"
+      [attr.stroke-dasharray]="shape.lineType"
+    ></line>
+    <!--todo-->
+    <circle
+    *ngSwitchCase="'Circle'"
+      [attr.cx]= "shape.coord[0][0]"
+      [attr.cy]= "shape.coord[0][1]"
+      [attr.r]= "50"
+      [attr.stroke]= "shape.lineColor"
+      [attr.stroke-width]= "shape.lineWight"
+      [attr.stroke-dasharray]= "shape.lineType"
+      [attr.fill]="shape.backgroundColor"
+    >
+    </circle>
+  </ng-container>
+</svg>
+<div class="actions">
+  <button
+    mat-button
+    mat-icon-button
+    color="primary"
+    aria-label="Canvas settings"
+    [colorPicker]="color"
+    (colorPickerChange)="color=$event"
+  >
+    <mat-icon>settings</mat-icon>
+  </button>
+  <button
+    mat-button
+    mat-icon-button
+    color="warn"
+    aria-label="Clear canvas"
+    (click)="clearCanvas()"
+  >
+    <mat-icon>clear</mat-icon>
+  </button>
+</div>

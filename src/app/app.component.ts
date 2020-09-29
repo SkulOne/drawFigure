@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Figure} from './shared/classes/abstract/figure';
+import {CommandService} from './shared/services/command.service';
 
 @Component({
   selector: 'app-root',
@@ -10,13 +11,13 @@ export class AppComponent implements OnInit{
   title = 'drawFigures';
   figures: Figure[];
 
-  constructor() {
+  constructor(private commandService: CommandService) {
   }
 
   ngOnInit(): void {
   }
 
-  setFigures(event: Figure[]): void {
-    this.figures = event;
+  setFigures(query: string): void {
+    this.figures = this.commandService.getFigures(query);
   }
 }

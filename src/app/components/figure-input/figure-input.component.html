@@ -1,17 +1,27 @@
-<form #forms="ngForm"
-      [formGroup]="form" c(ngSubmit)="onSubmit()">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
   <mat-form-field appearance="outline" color="accent">
     <mat-label>Figure</mat-label>
-    <input type="text" minlength="19" matInput placeholder="Enter the command" required
-           name="first" [formControl]="reactiveForm">
-    <button matSuffix mat-icon-button aria-label="Draw figure" type="submit" [disabled]="!forms.valid">
-      <mat-icon>edit</mat-icon>
+    <input
+      type="text"
+      minlength="19"
+      matInput
+      placeholder="Enter the command"
+      formControlName="query"
+    >
+    <button
+      matSuffix
+      mat-icon-button
+      aria-label="Draw figure"
+      type="submit"
+      [disabled]="!form.valid"
+    >      <mat-icon>edit</mat-icon>
     </button>
     <mat-hint>Ex: line -p [50, 50] [100, 100] -c rgb(255, 0, 0) ||
       rectangle -p [50, 50] [100, 100] -c rgb(0, 255, 0) -b rgba(255, 0, 0, 0.3) ||
       circle -p [75, 75] -r 25 -c rgba(255, 0, 0, 0.8) -b rgba(0, 255, 0, 0.3)
     </mat-hint>
-<!--    <mat-error>321312</mat-error>-->
-    <p *ngIf="reactiveForm.errors.emailDomain">r</p>
+    <mat-error>
+      {{form.get('query').errors | json}}
+    </mat-error>
   </mat-form-field>
 </form>
