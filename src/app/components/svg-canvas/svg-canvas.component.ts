@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, HostListener, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {Figure} from '../../shared/classes/abstract/figure';
 
 @Component({
@@ -9,9 +9,8 @@ import {Figure} from '../../shared/classes/abstract/figure';
 export class SvgCanvasComponent implements OnInit, OnChanges {
   @Input() figures: Figure[];
   @ViewChild('svg') svg;
-  width = 600;
   color: any;
-  figureSvg: SVGElement[] = [];
+
   constructor() {
   }
 
@@ -21,8 +20,8 @@ export class SvgCanvasComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.figures) {
       this.figures.forEach((figure) => {
-        this.svg.nativeElement.appendChild(figure.draw());
-        console.log(this.figureSvg);
+        const element = figure.draw();
+        this.svg.nativeElement.appendChild(element);
       });
     }
   }

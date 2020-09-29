@@ -6,13 +6,17 @@ import {Circle} from '../classes/circle';
 import {Ellipse} from '../classes/ellipse';
 import {Triangle} from '../classes/triangle';
 import {Rectangle} from '../classes/rectangle';
+import {LoggerService} from './logger.service';
+import {ClassExclusion} from 'tslint/lib/rules/completed-docs/classExclusion';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommandService {
 
-  constructor() {
+  private static ERROR_MESSAGE = 'Command have invalid parameter for current figure';
+
+  constructor(private logger: LoggerService) {
   }
 
   private static parseCoords(value): number[][] {
@@ -42,40 +46,19 @@ export class CommandService {
     return commandsArray.filter((command) => command.trim() !== '');
   }
 
-  parseCommand(input: string): Figure[] {
-    let commands: string[] = input.split(';');
-    const figures: Figure[] = [];
-    commands = CommandService.clearEmptyStrings(commands);
-    commands.forEach((inputValue: string) => {
-      const figureProperty = inputValue.split(/\s-/).map(s => s.trim());
-      const [figureName, ...properties] = figureProperty;
-      switch (figureName) {
-        case 'line':
-          const line: Line = new Line();
-          figures.push(this.createFigure(line, properties));
-          break;
-        case 'rectangle':
-          const rectangle: Rectangle = new Rectangle();
-          figures.push(this.createFigure(rectangle, properties));
-          return;
-        case 'circle':
-          const circle: Circle = new Circle();
-          figures.push(this.createFigure(circle, properties));
-          break;
-        case 'ellipse':
-          const ellipse: Ellipse = new Ellipse();
-          figures.push(this.createFigure(ellipse, properties));
-          break;
-        case 'triangle':
-          const triangle: Triangle = new Triangle();
-          figures.push(this.createFigure(triangle, properties));
-          break;
-      }
-    });
-    return figures;
+  private static checkType(figure: Figure, figureClass: any): void {
+    if (!(figure instanceof figureClass)) {
+      throw new Error(CommandService.ERROR_MESSAGE);
+    }
   }
 
-  private createFigure(figure: Figure, properties: string[]): Figure {
+  getFigures(input: string): Figure[] {
+    let commands: string[] = input.split(';');
+    commands = CommandService.clearEmptyStrings(commands);
+    return commands.map((value => this.createFigure(value)));
+  }
+
+  private setFigureProperties(figure: Figure, properties: string[]): Figure {
     properties.forEach(value => {
       switch (value.match(/\w+\d?/)[0]) {
         case 'p':
@@ -94,17 +77,43 @@ export class CommandService {
           figure.backgroundColor = value.slice(1);
           break;
         case 'r':
+          CommandService.checkType(figure, Circle);
           (figure as Circle).radius = +value.slice(1);
           break;
-        case 'rx':
+        case 'r1':
+          CommandService.checkType(figure, Ellipse);
           (figure as Ellipse).radius = +value.split(' ').slice(1);
           break;
-        case 'ry':
+        case 'r2':
+          CommandService.checkType(figure, Ellipse);
           (figure as Ellipse).radius2 = +value.split(' ').slice(1);
           break;
       }
-
     });
     return figure;
   }
+  private createFigure(inputValue: string): Figure{
+    const figureProperty = inputValue.split(/\s-/).map(s => s.trim());
+    const [figureName, ...properties] = figureProperty;
+    let figure: Figure;
+    switch (figureName) {
+        case 'line':
+          figure = new Line();
+          break;
+        case 'rectangle':
+          figure = new Rectangle();
+          break;
+        case 'circle':
+          figure = new Circle();
+          break;
+        case 'ellipse':
+          figure = new Ellipse();
+          break;
+        case 'triangle':
+          figure = new Triangle();
+          break;
+      }
+    return this.setFigureProperties(figure, properties);
+  }
 }
+
