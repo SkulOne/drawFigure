@@ -1,18 +1,10 @@
-import {Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
-import {CommandService} from '../../shared/services/command.service';
-import {Figure} from '../../shared/classes/abstract/figure';
-import {LoggerService} from '../../shared/services/logger.service';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {
-  AbstractControl,
-  AsyncValidatorFn,
   FormControl,
   FormGroup,
   ValidationErrors,
-  ValidatorFn,
   Validators
 } from '@angular/forms';
-import {Observable, of} from 'rxjs';
-import {ValidateFn} from 'codelyzer/walkerFactory/walkerFn';
 
 @Component({
   selector: 'app-figure-input',
@@ -25,7 +17,8 @@ export class FigureInputComponent implements OnInit {
 
   constructor() {
     this.form = new FormGroup({
-      query: new FormControl('line -p [50, 50] [100, 100] -c rgb(255, 0, 0)', [Validators.required, emailDomainValidator])
+      query: new FormControl('circle -p [75, 75] -r 25 -c rgba(255, 0, 0, 0.8) -b rgba(0, 255, 0, 0.3); line -p [50, 50] [100, 100] -c rgb(255, 0, 0)',
+        [Validators.required, shapeCommandValidator])
     });
   }
 
@@ -40,11 +33,35 @@ export class FigureInputComponent implements OnInit {
   }
 }
 
-function emailDomainValidator(control: FormControl): ValidationErrors {
-  const email = control.value;
-  if (email && email.indexOf('@') !== -1) {return {
-    queryPattern: true
-  };
-  }
-  return null;
+function shapeCommandValidator(control: FormControl): ValidationErrors {
+  const inputValue = control.value[control.value.length - 1] === ';' ? control.value.substr(0, control.value.length - 1) : control.value;
+  const commands = inputValue.split(';');
+  let result = null;
+  commands.forEach((command) => {
+    if (!/^\s?[a-z]+[^0-9]\s-p(\s\[\d+,\s?\d+])+\s/.test(command)) {
+      result = {
+        error: 'Enter the command using the pattern figureName -p [number, number] ...options'
+      };
+    }
+    if (command.includes('circle')){
+      if (!/\s-r\s\d+\s/.test(command)){
+        result = {
+          error: 'The circle must have a radius'
+        };
+      }
+    }
+    if (command.includes('ellipse')){
+      if (!/\s-r1\s\d+\s/.test(command)){
+        result = {
+          error: 'The ellipse must have a r1=number'
+        };
+      }
+      if (!/\s-r2\s\d+\s/.test(command)){
+        result = {
+          error: 'The ellipse must have a r2=number'
+        };
+      }
+    }
+  });
+  return result;
 }

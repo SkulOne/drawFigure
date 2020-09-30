@@ -16,16 +16,46 @@
     ></line>
     <!--todo-->
     <circle
-    *ngSwitchCase="'Circle'"
-      [attr.cx]= "shape.coord[0][0]"
-      [attr.cy]= "shape.coord[0][1]"
-      [attr.r]= "50"
-      [attr.stroke]= "shape.lineColor"
-      [attr.stroke-width]= "shape.lineWight"
-      [attr.stroke-dasharray]= "shape.lineType"
+      *ngSwitchCase="'Circle'"
+      [attr.cx]="shape.coord[0][0]"
+      [attr.cy]="shape.coord[0][1]"
+      [attr.r]="50"
+      [attr.stroke]="shape.lineColor"
+      [attr.stroke-width]="shape.lineWight"
+      [attr.stroke-dasharray]="shape.lineType"
       [attr.fill]="shape.backgroundColor"
-    >
-    </circle>
+    ></circle>
+    <ellipse
+      *ngSwitchCase="'Ellipse'"
+      [attr.cx]="shape.coord[0][0]"
+      [attr.cy]="shape.coord[0][1]"
+      [attr.rx]="50"
+      [attr.ry]="70"
+      [attr.stroke]="shape.lineColor"
+      [attr.stroke-width]="shape.lineWight"
+      [attr.stroke-dasharray]="shape.lineType"
+      [attr.fill]="shape.backgroundColor"
+    ></ellipse>
+    <rect
+      *ngSwitchCase="'Rectangle'"
+      [attr.x]="shape.coord[0][0]"
+      [attr.y]="shape.coord[0][1]"
+      [attr.width]="rect(shape.coord[0][0], shape.coord[1][0])"
+      [attr.height]="rect(shape.coord[0][1], shape.coord[1][1])"
+
+      [attr.stroke]="shape.lineColor"
+      [attr.stroke-width]="shape.lineWight"
+      [attr.stroke-dasharray]="shape.lineType"
+      [attr.fill]="shape.backgroundColor"
+    ></rect>
+    <polygon
+      *ngSwitchCase="'Triangle'"
+      [attr.points]="shape.coord.toString()"
+      [attr.stroke-width]="shape.lineWight"
+      [attr.stroke-dasharray]="shape.lineType"
+      [attr.fill]="shape.backgroundColor"
+      [attr.stroke]="shape.lineColor"
+    ></polygon>
   </ng-container>
 </svg>
 <div class="actions">

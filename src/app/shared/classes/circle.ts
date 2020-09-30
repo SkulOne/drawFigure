@@ -15,15 +15,4 @@ export class Circle extends Figure{
     this._radius = value;
   }
 
-  draw(): SVGElement {
-    const element = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    element.setAttributeNS(null, 'cx', String(this.coord[0][0]));
-    element.setAttributeNS(null, 'cy', String(this.coord[0][1]));
-    element.setAttributeNS(null, 'r', String(this.radius));
-    element.setAttributeNS(null, 'stroke', this.lineColor);
-    element.setAttributeNS(null, 'stroke-width', String(this.lineWight));
-    element.setAttributeNS(null, 'stroke-dasharray', String(this.lineType));
-    element.setAttributeNS(null, 'fill', String(this.backgroundColor));
-    return element;
-  }
 }

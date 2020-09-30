@@ -3,14 +3,12 @@ import {
   Component,
   ElementRef,
   Input,
-  OnChanges,
   OnInit,
-  SimpleChanges,
   ViewChild
 } from '@angular/core';
 import {Figure} from '../../shared/classes/abstract/figure';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {filter, take} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-svg-canvas',
@@ -31,13 +29,13 @@ export class SvgCanvasComponent implements OnInit {
     });
   }
 
-  // for vanilla version
+  // // for vanilla version
   // @Input() set figures(figures: Figure[]) {
   //   figures.forEach((figure) => {
   //     const element = figure.draw();
   //     this.svg.nativeElement.appendChild(element);
   //   });
-  // };
+  // }
 
   @ViewChild('svg') svg: ElementRef;
   color: any;
@@ -55,8 +53,13 @@ export class SvgCanvasComponent implements OnInit {
     // this.svg.nativeElement.innerHTML = '';
   }
 
-  getShapeType(shape: Figure) {
+  getShapeType(shape: Figure): string {
     return shape.constructor.name;
+  }
+
+  rect(coord1: number, coord2: number): number {
+    console.log(Math.abs(coord1 - coord2));
+    return Math.abs(coord1 - coord2);
   }
 
 }

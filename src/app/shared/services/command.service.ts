@@ -1,13 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Line} from '../classes/line';
-import {Figure} from '../classes/abstract/figure';
 import {LineType} from '../enums/line-type.enum';
 import {Circle} from '../classes/circle';
 import {Ellipse} from '../classes/ellipse';
 import {Triangle} from '../classes/triangle';
 import {Rectangle} from '../classes/rectangle';
-import {LoggerService} from './logger.service';
-import {ClassExclusion} from 'tslint/lib/rules/completed-docs/classExclusion';
+import {Figure} from '../interfaces/figure';
+import {FigureType} from '../enums/figure-type.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +15,7 @@ export class CommandService {
 
   private static ERROR_MESSAGE = 'Command have invalid parameter for current figure';
 
-  constructor(private logger: LoggerService) {
+  constructor() {
   }
 
   private static parseCoords(value): number[][] {
@@ -77,7 +76,6 @@ export class CommandService {
           figure.backgroundColor = value.slice(1);
           break;
         case 'r':
-          CommandService.checkType(figure, Circle);
           (figure as Circle).radius = +value.slice(1);
           break;
         case 'r1':
@@ -92,27 +90,33 @@ export class CommandService {
     });
     return figure;
   }
-  private createFigure(inputValue: string): Figure{
+
+  private createFigure(inputValue: string): Figure {
     const figureProperty = inputValue.split(/\s-/).map(s => s.trim());
     const [figureName, ...properties] = figureProperty;
     let figure: Figure;
     switch (figureName) {
-        case 'line':
-          figure = new Line();
-          break;
-        case 'rectangle':
-          figure = new Rectangle();
-          break;
-        case 'circle':
-          figure = new Circle();
-          break;
-        case 'ellipse':
-          figure = new Ellipse();
-          break;
-        case 'triangle':
-          figure = new Triangle();
-          break;
-      }
+      case 'line':
+        figure = new Line();
+        figure.shapeType = FigureType.Line;
+        break;
+      case 'rectangle':
+        figure = new Rectangle();
+        figure.shapeType = FigureType.Rectangle;
+        break;
+      case 'circle':
+        figure = new Circle();
+        figure.shapeType = FigureType.Circle;
+        break;
+      case 'ellipse':
+        figure = new Ellipse();
+        figure.shapeType = FigureType.Ellipse;
+        break;
+      case 'triangle':
+        figure = new Triangle();
+        figure.shapeType = FigureType.Triangle;
+        break;
+    }
     return this.setFigureProperties(figure, properties);
   }
 }

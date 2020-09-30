@@ -59,6 +59,4 @@ export abstract class Figure {
   set lineType(value: LineType) {
     this._lineType = value;
   }
-
-  abstract draw(): SVGElement;
 }

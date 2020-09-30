@@ -21,7 +21,7 @@
       circle -p [75, 75] -r 25 -c rgba(255, 0, 0, 0.8) -b rgba(0, 255, 0, 0.3)
     </mat-hint>
     <mat-error>
-      {{form.get('query').errors | json}}
+      {{form.get('query').errors?.error}}
     </mat-error>
   </mat-form-field>
 </form>
