@@ -7,11 +7,11 @@ import {
 } from '@angular/forms';
 
 @Component({
-  selector: 'app-figure-input',
-  templateUrl: './figure-input.component.html',
-  styleUrls: ['./figure-input.component.scss']
+  selector: 'app-shape-input',
+  templateUrl: './shape-input.component.html',
+  styleUrls: ['./shape-input.component.scss']
 })
-export class FigureInputComponent implements OnInit {
+export class ShapeInputComponent implements OnInit {
   @Output() figureEnter = new EventEmitter<string>();
   form: FormGroup;
 
@@ -39,7 +39,7 @@ function shapeCommandValidator(control: FormControl): ValidationErrors {
   commands.forEach((command) => {
     if (!/^\s?[a-z]+[^0-9]\s-p(\s\[\d+,\s?\d+])+\s/.test(command)) {
       result = {
-        error: 'Enter the command using the pattern figureName -p [number, number] ...options'
+        error: 'Enter the command using the pattern shapeName -p [number, number] ...options'
       };
     }
     if (command.includes('circle')){

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {LineType} from '../enums/line-type.enum';
-import {Circle, Ellipse, Figure, Rectangle, Shape} from '../interfaces/figure';
+import {Circle, Ellipse, BaseShape, Rectangle, Shape} from '../interfaces/baseShape';
 import {Coords} from '../interfaces/coord';
 import {ShapeType} from '../enums/shape-type.enum';
 
@@ -49,7 +49,7 @@ export class CommandService {
     const [figureName, coordsString, ...properties] = inputValue.split(/\s-/).map(s => s.trim());
     const coords = CommandService.parseCoords(coordsString);
 
-    const figure: Figure = {};
+    const figure: BaseShape = {};
 
     switch (figureName) {
       case 'line':
@@ -75,36 +75,36 @@ export class CommandService {
         figure.coords = coords.toString();
         break;
     }
-    return this.setFigureProperties(figure, properties);
+    return this.setShapeProperties(figure, properties);
   }
 
-  private setFigureProperties(figure: Shape, properties: string[]): Shape {
+  private setShapeProperties(shape: Shape, properties: string[]): Shape {
     properties.forEach(value => {
       switch (value.match(/\w+\d?/)[0]) {
         case 'c':
-          figure.color = value.slice(1);
+          shape.color = value.slice(1);
           break;
         case 'lw':
-          figure.lineWidth = CommandService.parseLineWidth(value);
+          shape.lineWidth = CommandService.parseLineWidth(value);
           break;
         case 'lt':
-          figure.lineType = CommandService.parseLineType(value);
+          shape.lineType = CommandService.parseLineType(value);
           break;
         case 'b':
-          figure.background = value.slice(1);
+          shape.background = value.slice(1);
           break;
         case 'r':
-          (figure as Circle).r = +value.slice(1);
+          (shape as Circle).r = +value.slice(1);
           break;
         case 'r1':
-          (figure as Ellipse).rx = +value.split(' ').slice(1);
+          (shape as Ellipse).rx = +value.split(' ').slice(1);
           break;
         case 'r2':
-          (figure as Ellipse).ry = +value.split(' ').slice(1);
+          (shape as Ellipse).ry = +value.split(' ').slice(1);
           break;
       }
     });
-    return figure;
+    return shape;
   }
 
 }

@@ -1,9 +1,7 @@
 <svg
-  #svg
-  height="1200px"
   [style.background]="color"
 >
-  <ng-container *ngFor="let shape of figures$ | async" [ngSwitch]="shape.shapeType">
+  <ng-container *ngFor="let shape of shapes$ | async" [ngSwitch]="shape.shapeType">
     <line
       *ngSwitchCase="ShapeType.LINE"
       [attr.x1]="shape.coords[0].x"
@@ -78,9 +76,3 @@
     <mat-icon>clear</mat-icon>
   </button>
 </div>
-line -p [50, 50] [100, 100] -c rgb(255, 0, 0);
-rectangle -p [100, 50] [150, 100] -c rgb(0, 255, 0) -b rgba(255, 0, 0, 0.3);
-triangle -p [150, 50] [200, 100] [100, 100] -c rgb(0, 0, 255) -b rgba(255, 0, 0,
-0.3);
-circle -p [175, 75] -r 25 -c rgba(255, 0, 0, 0.8) -b rgba(0, 255, 0, 0.3);
-ellipse -p [275, 75] -r1 50 -r2 25 -c rgb(0, 255, 0) -b rgba(255, 0, 0, 0.3);

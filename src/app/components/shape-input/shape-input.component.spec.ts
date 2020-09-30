@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FigureInputComponent } from './figure-input.component';
+import { ShapeInputComponent } from './shape-input.component';
 
-describe('FigureInputComponent', () => {
-  let component: FigureInputComponent;
-  let fixture: ComponentFixture<FigureInputComponent>;
+describe('ShapeInputComponent', () => {
+  let component: ShapeInputComponent;
+  let fixture: ComponentFixture<ShapeInputComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FigureInputComponent ]
+      declarations: [ ShapeInputComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FigureInputComponent);
+    fixture = TestBed.createComponent(ShapeInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

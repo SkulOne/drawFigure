@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Figure} from './shared/interfaces/figure';
+import {BaseShape} from './shared/interfaces/baseShape';
 import {CommandService} from './shared/services/command.service';
 
 @Component({
@@ -8,8 +8,8 @@ import {CommandService} from './shared/services/command.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
-  title = 'drawFigures';
-  figures: Figure[];
+  title = 'drawShapes';
+  shapes: BaseShape[];
 
   constructor(private commandService: CommandService) {
   }
@@ -18,6 +18,6 @@ export class AppComponent implements OnInit{
   }
 
   setFigures(query: string): void {
-    this.figures = this.commandService.getFigures(query);
+    this.shapes = this.commandService.getFigures(query);
   }
 }
