@@ -6,9 +6,10 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import {Figure} from '../../shared/classes/abstract/figure';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {take} from 'rxjs/operators';
+import {Shape} from '../../shared/interfaces/figure';
+import {ShapeType} from '../../shared/enums/shape-type.enum';
 
 @Component({
   selector: 'app-svg-canvas',
@@ -17,15 +18,14 @@ import {take} from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgCanvasComponent implements OnInit {
-  private _figures$: BehaviorSubject<Figure[]> = new BehaviorSubject(null);
-  get figures$(): Observable<Figure[]> {
+  private _figures$: BehaviorSubject<Shape[]> = new BehaviorSubject(null);
+  get figures$(): Observable<Shape[]> {
     return this._figures$.asObservable();
   }
 
-  @Input() set figures(newShapes: Figure[]) {
-    console.log(newShapes);
+  @Input() set figures(newShapes: Shape[]) {
     this.figures$.pipe(take(1)).subscribe({
-      next: (prevShapes: Figure[]) => this._figures$.next(prevShapes ? [...prevShapes, ...newShapes] : newShapes)
+      next: (prevShapes: Shape[]) => this._figures$.next(prevShapes ? [...prevShapes, ...newShapes] : newShapes)
     });
   }
 
@@ -39,6 +39,7 @@ export class SvgCanvasComponent implements OnInit {
 
   @ViewChild('svg') svg: ElementRef;
   color: any;
+  ShapeType = ShapeType;
 
   constructor() {
   }
@@ -48,17 +49,9 @@ export class SvgCanvasComponent implements OnInit {
 
   clearCanvas(): void {
     this._figures$.next([]);
-
-    // for vanilla version
-    // this.svg.nativeElement.innerHTML = '';
-  }
-
-  getShapeType(shape: Figure): string {
-    return shape.constructor.name;
   }
 
   rect(coord1: number, coord2: number): number {
-    console.log(Math.abs(coord1 - coord2));
     return Math.abs(coord1 - coord2);
   }
 

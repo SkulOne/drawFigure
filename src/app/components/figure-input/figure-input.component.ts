@@ -27,7 +27,6 @@ export class FigureInputComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      console.log('onSubmit');
       this.figureEnter.emit(this.form.getRawValue().query);
     }
   }
@@ -44,7 +43,7 @@ function shapeCommandValidator(control: FormControl): ValidationErrors {
       };
     }
     if (command.includes('circle')){
-      if (!/\s-r\s\d+\s/.test(command)){
+      if (!/\s-r\s\d+\s?/.test(command)){
         result = {
           error: 'The circle must have a radius'
         };

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Figure} from './shared/classes/abstract/figure';
+import {Figure} from './shared/interfaces/figure';
 import {CommandService} from './shared/services/command.service';
 
 @Component({

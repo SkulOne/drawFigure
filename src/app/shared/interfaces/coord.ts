@@ -1,4 +1,4 @@
-export interface Coord {
+export interface Coords{
   x: number;
   y: number;
 }

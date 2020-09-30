@@ -3,58 +3,57 @@
   height="1200px"
   [style.background]="color"
 >
-  <ng-container *ngFor="let shape of figures$ | async" [ngSwitch]="getShapeType(shape)">
+  <ng-container *ngFor="let shape of figures$ | async" [ngSwitch]="shape.shapeType">
     <line
-      *ngSwitchCase="'Line'"
-      [attr.x1]="shape.coord[0][0]"
-      [attr.y1]="shape.coord[0][1]"
-      [attr.x2]="shape.coord[1][0]"
-      [attr.y2]="shape.coord[1][1]"
-      [attr.stroke]="shape.lineColor"
-      [attr.stroke-width]="shape.lineWight"
+      *ngSwitchCase="ShapeType.LINE"
+      [attr.x1]="shape.coords[0].x"
+      [attr.y1]="shape.coords[0].y"
+      [attr.x2]="shape.coords[1].x"
+      [attr.y2]="shape.coords[1].y"
+      [attr.stroke]="shape.color"
+      [attr.stroke-width]="shape.lineWidth"
       [attr.stroke-dasharray]="shape.lineType"
     ></line>
     <!--todo-->
     <circle
-      *ngSwitchCase="'Circle'"
-      [attr.cx]="shape.coord[0][0]"
-      [attr.cy]="shape.coord[0][1]"
-      [attr.r]="50"
-      [attr.stroke]="shape.lineColor"
-      [attr.stroke-width]="shape.lineWight"
+      *ngSwitchCase="ShapeType.CIRCLE"
+      [attr.cx]="shape.coords[0].x"
+      [attr.cy]="shape.coords[0].y"
+      [attr.r]="shape.r"
+      [attr.stroke]="shape.color"
+      [attr.stroke-width]="shape.lineWidth"
       [attr.stroke-dasharray]="shape.lineType"
-      [attr.fill]="shape.backgroundColor"
+      [attr.fill]="shape.background"
     ></circle>
     <ellipse
-      *ngSwitchCase="'Ellipse'"
-      [attr.cx]="shape.coord[0][0]"
-      [attr.cy]="shape.coord[0][1]"
-      [attr.rx]="50"
-      [attr.ry]="70"
-      [attr.stroke]="shape.lineColor"
-      [attr.stroke-width]="shape.lineWight"
+      *ngSwitchCase="ShapeType.ELLIPSE"
+      [attr.cx]="shape.coords[0].x"
+      [attr.cy]="shape.coords[0].y"
+      [attr.rx]="shape.rx"
+      [attr.ry]="shape.ry"
+      [attr.stroke]="shape.color"
+      [attr.stroke-width]="shape.lineWidth"
       [attr.stroke-dasharray]="shape.lineType"
-      [attr.fill]="shape.backgroundColor"
+      [attr.fill]="shape.background"
     ></ellipse>
     <rect
-      *ngSwitchCase="'Rectangle'"
-      [attr.x]="shape.coord[0][0]"
-      [attr.y]="shape.coord[0][1]"
-      [attr.width]="rect(shape.coord[0][0], shape.coord[1][0])"
-      [attr.height]="rect(shape.coord[0][1], shape.coord[1][1])"
-
-      [attr.stroke]="shape.lineColor"
-      [attr.stroke-width]="shape.lineWight"
+      *ngSwitchCase="ShapeType.RECTANGLE"
+      [attr.x]="shape.coords[0].x"
+      [attr.y]="shape.coords[0].y"
+      [attr.width]="shape.width"
+      [attr.height]="shape.height"
+      [attr.stroke]="shape.color"
+      [attr.stroke-width]="shape.lineWidth"
       [attr.stroke-dasharray]="shape.lineType"
-      [attr.fill]="shape.backgroundColor"
+      [attr.fill]="shape.background"
     ></rect>
     <polygon
-      *ngSwitchCase="'Triangle'"
-      [attr.points]="shape.coord.toString()"
-      [attr.stroke-width]="shape.lineWight"
+      *ngSwitchCase="ShapeType.TRIANGLE"
+      [attr.points]="shape.coords"
+      [attr.stroke-width]="shape.lineWidth"
       [attr.stroke-dasharray]="shape.lineType"
-      [attr.fill]="shape.backgroundColor"
-      [attr.stroke]="shape.lineColor"
+      [attr.fill]="shape.background"
+      [attr.stroke]="shape.color"
     ></polygon>
   </ng-container>
 </svg>
@@ -79,3 +78,9 @@
     <mat-icon>clear</mat-icon>
   </button>
 </div>
+line -p [50, 50] [100, 100] -c rgb(255, 0, 0);
+rectangle -p [100, 50] [150, 100] -c rgb(0, 255, 0) -b rgba(255, 0, 0, 0.3);
+triangle -p [150, 50] [200, 100] [100, 100] -c rgb(0, 0, 255) -b rgba(255, 0, 0,
+0.3);
+circle -p [175, 75] -r 25 -c rgba(255, 0, 0, 0.8) -b rgba(0, 255, 0, 0.3);
+ellipse -p [275, 75] -r1 50 -r2 25 -c rgb(0, 255, 0) -b rgba(255, 0, 0, 0.3);

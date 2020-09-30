@@ -1,28 +1,22 @@
 import {Injectable} from '@angular/core';
-import {Line} from '../classes/line';
 import {LineType} from '../enums/line-type.enum';
-import {Circle} from '../classes/circle';
-import {Ellipse} from '../classes/ellipse';
-import {Triangle} from '../classes/triangle';
-import {Rectangle} from '../classes/rectangle';
-import {Figure} from '../interfaces/figure';
-import {FigureType} from '../enums/figure-type.enum';
+import {Circle, Ellipse, Figure, Rectangle, Shape} from '../interfaces/figure';
+import {Coords} from '../interfaces/coord';
+import {ShapeType} from '../enums/shape-type.enum';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommandService {
 
-  private static ERROR_MESSAGE = 'Command have invalid parameter for current figure';
-
   constructor() {
   }
 
-  private static parseCoords(value): number[][] {
-    return value.match(/(\d+), ?(\d+)/g)
+  private static parseCoords(value): Coords[] {
+    return value.match(/(\d+),\s?(\d+)/g)
       .map(value1 => {
-        return value1.split(/, ?/)
-          .map(val => +val);
+        const coords = value1.split(/, ?/);
+        return ({x: coords[0], y: coords[1]} as Coords);
       });
   }
 
@@ -38,86 +32,80 @@ export class CommandService {
   }
 
   private static parseLineWidth(value): number {
-    return +value.match(/(\d+)/)[0];
+    return +value.match(/\d+/)[0];
   }
 
   private static clearEmptyStrings(commandsArray: string[]): string[] {
     return commandsArray.filter((command) => command.trim() !== '');
   }
 
-  private static checkType(figure: Figure, figureClass: any): void {
-    if (!(figure instanceof figureClass)) {
-      throw new Error(CommandService.ERROR_MESSAGE);
-    }
-  }
-
-  getFigures(input: string): Figure[] {
+  getFigures(input: string): Shape[] {
     let commands: string[] = input.split(';');
     commands = CommandService.clearEmptyStrings(commands);
     return commands.map((value => this.createFigure(value)));
   }
 
-  private setFigureProperties(figure: Figure, properties: string[]): Figure {
+  private createFigure(inputValue: string): Shape {
+    const [figureName, coordsString, ...properties] = inputValue.split(/\s-/).map(s => s.trim());
+    const coords = CommandService.parseCoords(coordsString);
+
+    const figure: Figure = {};
+
+    switch (figureName) {
+      case 'line':
+        figure.shapeType = ShapeType.LINE;
+        figure.coords = coords;
+        break;
+      case 'rectangle':
+        figure.shapeType = ShapeType.RECTANGLE;
+        (figure as Rectangle).width = Math.abs(coords[0].x - coords[1].x);
+        (figure as Rectangle).height = Math.abs(coords[0].y - coords[1].y);
+        figure.coords = coords;
+        break;
+      case 'circle':
+        figure.shapeType = ShapeType.CIRCLE;
+        figure.coords = coords;
+        break;
+      case 'ellipse':
+        figure.shapeType = ShapeType.ELLIPSE;
+        figure.coords = coords;
+        break;
+      case 'triangle':
+        figure.shapeType = ShapeType.TRIANGLE;
+        figure.coords = coords.toString();
+        break;
+    }
+    return this.setFigureProperties(figure, properties);
+  }
+
+  private setFigureProperties(figure: Shape, properties: string[]): Shape {
     properties.forEach(value => {
       switch (value.match(/\w+\d?/)[0]) {
-        case 'p':
-          figure.coord = CommandService.parseCoords(value);
-          break;
         case 'c':
-          figure.lineColor = value.slice(1);
+          figure.color = value.slice(1);
           break;
         case 'lw':
-          figure.lineWight = CommandService.parseLineWidth(value);
+          figure.lineWidth = CommandService.parseLineWidth(value);
           break;
         case 'lt':
           figure.lineType = CommandService.parseLineType(value);
           break;
         case 'b':
-          figure.backgroundColor = value.slice(1);
+          figure.background = value.slice(1);
           break;
         case 'r':
-          (figure as Circle).radius = +value.slice(1);
+          (figure as Circle).r = +value.slice(1);
           break;
         case 'r1':
-          CommandService.checkType(figure, Ellipse);
-          (figure as Ellipse).radius = +value.split(' ').slice(1);
+          (figure as Ellipse).rx = +value.split(' ').slice(1);
           break;
         case 'r2':
-          CommandService.checkType(figure, Ellipse);
-          (figure as Ellipse).radius2 = +value.split(' ').slice(1);
+          (figure as Ellipse).ry = +value.split(' ').slice(1);
           break;
       }
     });
     return figure;
   }
 
-  private createFigure(inputValue: string): Figure {
-    const figureProperty = inputValue.split(/\s-/).map(s => s.trim());
-    const [figureName, ...properties] = figureProperty;
-    let figure: Figure;
-    switch (figureName) {
-      case 'line':
-        figure = new Line();
-        figure.shapeType = FigureType.Line;
-        break;
-      case 'rectangle':
-        figure = new Rectangle();
-        figure.shapeType = FigureType.Rectangle;
-        break;
-      case 'circle':
-        figure = new Circle();
-        figure.shapeType = FigureType.Circle;
-        break;
-      case 'ellipse':
-        figure = new Ellipse();
-        figure.shapeType = FigureType.Ellipse;
-        break;
-      case 'triangle':
-        figure = new Triangle();
-        figure.shapeType = FigureType.Triangle;
-        break;
-    }
-    return this.setFigureProperties(figure, properties);
-  }
 }
 
